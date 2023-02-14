@@ -1,6 +1,5 @@
 const addButton = document.querySelector('#add-task-button')
 const clearButton = document.querySelector('#clear-button')
-
 class Item {
     constructor(taskID, taskText) {
         this.taskID = taskID;
@@ -13,32 +12,37 @@ class Item {
     // add new todo task
     addItem() {
         localStorage.setItem(this.taskID, this.taskText);
+        this.#writeElements(this.taskID, this.taskText);
+    } 
+
+    // private method for writing to DOM
+    #writeElements(taskID, taskText) {
         // create initial div tag
         let taskItem = document.createElement('div');
         taskItem.setAttribute('class', 'list-input-box-task');
-        taskItem.setAttribute('id', this.taskID);
+        taskItem.setAttribute('id', taskID);
         document.getElementById('todo-list').appendChild(taskItem);
         // create input box
         let taskBox = document.createElement('input')
         taskBox.setAttribute('type', 'text');
         taskBox.setAttribute('class', 'input-filed');
-        taskBox.setAttribute('id', this.taskID + '-text');
-        taskBox.setAttribute('value', this.taskText);
-        document.getElementById(this.taskID).appendChild(taskBox);
+        taskBox.setAttribute('id', taskID + '-text');
+        taskBox.setAttribute('value', taskText);
+        document.getElementById(taskID).appendChild(taskBox);
         // create edit button
         let editTaskButton = document.createElement('input');
         editTaskButton.setAttribute('type', 'button');
         editTaskButton.setAttribute('class', 'btn-sub');
-        editTaskButton.setAttribute('id', this.taskID + '-edit-button')
+        editTaskButton.setAttribute('id', taskID + '-edit-button')
         editTaskButton.setAttribute('value', 'Edit');
-        document.getElementById(this.taskID).appendChild(editTaskButton);
+        document.getElementById(taskID).appendChild(editTaskButton);
         // create delete button
         let deleteTaskButton = document.createElement('input');
         deleteTaskButton.setAttribute('type', 'button');
         deleteTaskButton.setAttribute('class', 'btn-sub');
-        deleteTaskButton.setAttribute('id', this.taskID + '-edit-button')
+        deleteTaskButton.setAttribute('id', taskID + '-edit-button')
         deleteTaskButton.setAttribute('value', 'Delete');
-        document.getElementById(this.taskID).appendChild(deleteTaskButton);
+        document.getElementById(taskID).appendChild(deleteTaskButton);
         // update counter
         document.getElementById('pending-tasks').innerText = Item.countTasks();
     }
@@ -67,3 +71,14 @@ addButton.addEventListener('click', () => {
 clearButton.addEventListener('click', () => {
     Item.destroy(); // static method so invoked on superclass
 })
+
+// determine if local storage already has items. If so, write to DOM.
+if (localStorage.length > 0) {
+    const storedKeys = Object.keys(localStorage);
+    storedKeys.forEach(key => {
+        const value = localStorage.getItem(key);
+        const item = new Item(key, value);
+        item.addItem();
+        Item.count += 1;
+    })
+}
