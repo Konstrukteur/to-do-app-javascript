@@ -27,12 +27,19 @@ class Item {
         taskItem.setAttribute('class', 'list-input-box-task');
         taskItem.setAttribute('id', taskID);
         document.getElementById('todo-list').appendChild(taskItem);
+        // create text box
+        let taskTitle = document.createElement('div')
+        taskTitle.setAttribute('class', 'task-description');
+        taskTitle.setAttribute('id', taskID + '-description');
+        taskTitle.innerHTML = taskText;
+        document.getElementById(taskID).appendChild(taskTitle);
         // create input box
         let taskBox = document.createElement('input')
         taskBox.setAttribute('type', 'text');
-        taskBox.setAttribute('class', 'input-filed');
+        taskBox.setAttribute('class', 'input-field');
         taskBox.setAttribute('id', taskID + '-text');
         taskBox.setAttribute('value', taskText);
+        taskBox.style.display = "none";
         document.getElementById(taskID).appendChild(taskBox);
         // create edit button
         let editTaskButton = document.createElement('input');
@@ -41,6 +48,14 @@ class Item {
         editTaskButton.setAttribute('id', taskID + '-edit-button')
         editTaskButton.setAttribute('value', 'Edit');
         document.getElementById(taskID).appendChild(editTaskButton);
+        // create save button
+        let saveTaskButton = document.createElement('input');
+        saveTaskButton.setAttribute('type', 'button');
+        saveTaskButton.setAttribute('class', 'btn-sub');
+        saveTaskButton.setAttribute('id', taskID + '-save-button')
+        saveTaskButton.setAttribute('value', 'Save');
+        saveTaskButton.style.display = "none";
+        document.getElementById(taskID).appendChild(saveTaskButton);
         // create delete button
         let deleteTaskButton = document.createElement('input');
         deleteTaskButton.setAttribute('type', 'button');
@@ -105,7 +120,18 @@ class Item {
 }
 
 const editEventListener = (taskID) => {
+    const descriptionField = document.getElementById(taskID + "-description");
+    descriptionField.style.display = "none";
+    const inputField = document.getElementById(taskID + "-text");
+    inputField.style.display = "block";
+    const editButton = document.getElementById(taskID = "-edit-button");
+    editButton.style.display = "none";
+    const saveButton = document.getElementById(taskID + "-save-button");
+    inputField.style.display = "block";
     console.log(`hello form the edit button of task${taskID}`);
+}
+const saveEventListener = (taskID) => {
+    console.log(`hello form the save button of task${taskID}`);
 }
 const deleteEventListener = (taskID) => {
     console.log(`hello form the delete button of task${taskID}`);
