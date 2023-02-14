@@ -64,7 +64,7 @@ class Item {
         deleteTaskButton.setAttribute('value', 'Delete');
         document.getElementById(taskID).appendChild(deleteTaskButton);
         // update counter
-        document.getElementById('pending-tasks').innerText = Item.countTasks();
+        Item.countTasks();
     }
 
     // delete todo task
@@ -72,7 +72,7 @@ class Item {
         localStorage.removeItem(taskID);
         const currentDiv = document.getElementById(taskID);
         currentDiv.remove();
-        document.getElementById('pending-tasks').innerText = Item.countTasks();
+        Item.countTasks();
     }
 
     // add edit todo task
@@ -85,12 +85,12 @@ class Item {
         localStorage.clear(); // destroy local storage
         let taskItems = document.querySelectorAll('.list-input-box-task');
         taskItems.forEach(task => task.remove());
-        document.getElementById('pending-tasks').innerText = Item.countTasks();
+        Item.countTasks();
     }
 
     static countTasks() {
         let taskListItems = document.querySelectorAll('.list-input-box-task');
-        return taskListItems.length;
+        document.getElementById('pending-tasks').innerText = taskListItems.length;
     }
 }
 
