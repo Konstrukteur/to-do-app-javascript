@@ -17,6 +17,7 @@ class Item {
         localStorage.setItem(this.taskID, this.taskText);
         this.#writeElements(this.taskID, this.taskText);
         document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => editEventListener(this.taskID));
+        document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => saveEventListener(this.taskID));
         document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => deleteEventListener(this.taskID));
     } 
 
@@ -99,18 +100,27 @@ const editEventListener = (taskID) => {
     descriptionField.style.display = "none";
     const inputField = document.getElementById(taskID + "-text");
     inputField.style.display = "block";
-    const editButton = document.getElementById(taskID = "-edit-button");
+    const editButton = document.getElementById(taskID + "-edit-button");
     editButton.style.display = "none";
     const saveButton = document.getElementById(taskID + "-save-button");
-    inputField.style.display = "block";
+    saveButton.style.display = "block";
     console.log(`hello form the edit button of task${taskID}`);
 }
 const saveEventListener = (taskID) => {
+    const descriptionField = document.getElementById(taskID + "-description");
+    descriptionField.style.display = "block";
+    const inputField = document.getElementById(taskID + "-text");
+    inputField.style.display = "none";
+    const editButton = document.getElementById(taskID + "-edit-button");
+    editButton.style.display = "block";
+    const saveButton = document.getElementById(taskID + "-save-button");
+    saveButton.style.display = "none";
+    // const value = localStorage.getItem(key)
+    // item.setItem(taskID);
     console.log(`hello form the save button of task${taskID}`);
 }
 const deleteEventListener = (taskID) => {
     Item.deleteItem(taskID);
-
 }
 
 addButton.addEventListener('click', () => {
