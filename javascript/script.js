@@ -124,7 +124,7 @@ clearButton.addEventListener('click', () => {
 
 // determine if local storage already has items. If so, write to DOM.
 if (localStorage.length > 0) {
-    const storedKeys = Object.keys(localStorage);
+    const storedKeys = Object.keys(localStorage).sort((a, b) => a - b);
     storedKeys.forEach(key => {
         const value = localStorage.getItem(key);
         const item = new Item(key, value);
