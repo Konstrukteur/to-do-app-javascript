@@ -57,6 +57,7 @@ class Item {
         localStorage.removeItem(taskID);
         const currentDiv = document.getElementById(taskID);
         currentDiv.remove();
+        document.getElementById('pending-tasks').innerText = Item.countTasks();
     }
 
     // add edit todo task
