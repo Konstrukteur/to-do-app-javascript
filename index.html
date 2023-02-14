@@ -1,12 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>To Do List</title>
+    <script src="script.js" defer></script>
+
 </head>
+
 <body>
-    
+    <section class="todowrap">
+        <h2 id="heading">TO DO LIST</h2>
+        <div class="todo-container">
+            <div class="add-task-wrap">
+                <form action="" id="add-task-form">
+                    <div class="list-input-box">
+                        <input type="text" class="input-filed" placeholder="Add new task" id="add-task-input">
+                        <!--<button class="btn-sub" type="submit" id="add-task-submit">Add Task</button>-->
+                        <button class="btn-sub"><i class="fas fa-plus"></i></button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="todo-container todo-task-list">
+            <h1 class="heading-tasklist">Tasks List</h1>
+            <div id="todo-tasks">
+                <div class="list-input-box">
+                    <input type="text" class="input-filed" placeholder="Task List" readonly>
+                    <button class="btn-sub">edit</button>
+                    <button class="btn-sub">delete</button>
+                </div>
+            </div>
+            <!--<div class="delete">
+                                <span>You have <span class="pendingTasks"></span> pending tasks</span>-->
+            <button id="btn-sub">Clear All</button>
+        </div>
+
+    </section>
 </body>
+
 </html>
