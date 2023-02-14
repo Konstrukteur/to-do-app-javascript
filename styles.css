@@ -37,7 +37,8 @@
     #00bbd466 0rem 0.4375rem 0.625rem -0.3125rem;
 }
 
-.list-input-box {
+.list-input-box,
+.list-input-box-task {
   display: flex;
   flex-direction: row;
   gap: 10px;
