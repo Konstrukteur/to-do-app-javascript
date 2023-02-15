@@ -135,9 +135,11 @@ const completedEventListener = (taskID) => {
     if (taskCheckbox.checked) {
         taskBox.style.background = "#66ff66";
         taskBox.style.textDecoration = "line-through";
+        document.getElementById(taskID).style.opacity = 0.5;
     } else {
         taskBox.style.background = "white";
         taskBox.style.textDecoration = "none";
+        document.getElementById(taskID).style.opacity = 1;
     }
 }
 
