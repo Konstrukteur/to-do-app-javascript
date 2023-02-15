@@ -39,7 +39,7 @@ class Item {
         // create input box
         let taskBox = document.createElement('input')
         taskBox.setAttribute('type', 'text');
-        taskBox.setAttribute('class', 'input-field');
+        taskBox.setAttribute('class', 'task-input-field');
         taskBox.setAttribute('id', taskID + '-text');
         taskBox.setAttribute('value', taskText);
         taskBox.style.display = "none";
@@ -47,14 +47,14 @@ class Item {
         // create edit button
         let editTaskButton = document.createElement('input');
         editTaskButton.setAttribute('type', 'button');
-        editTaskButton.setAttribute('class', 'btn-sub');
+        editTaskButton.setAttribute('class', 'btn-sub btn-edit');
         editTaskButton.setAttribute('id', taskID + '-edit-button')
         editTaskButton.setAttribute('value', 'Edit');
         document.getElementById(taskID).appendChild(editTaskButton);
         // create save button
         let saveTaskButton = document.createElement('input');
         saveTaskButton.setAttribute('type', 'button');
-        saveTaskButton.setAttribute('class', 'btn-sub');
+        saveTaskButton.setAttribute('class', 'btn-sub btn-save');
         saveTaskButton.setAttribute('id', taskID + '-save-button')
         saveTaskButton.setAttribute('value', 'Save');
         saveTaskButton.style.display = "none";
@@ -62,7 +62,7 @@ class Item {
         // create delete button
         let deleteTaskButton = document.createElement('input');
         deleteTaskButton.setAttribute('type', 'button');
-        deleteTaskButton.setAttribute('class', 'btn-sub');
+        deleteTaskButton.setAttribute('class', 'btn-sub btn-delete');
         deleteTaskButton.setAttribute('id', taskID + '-delete-button')
         deleteTaskButton.setAttribute('value', 'Delete');
         document.getElementById(taskID).appendChild(deleteTaskButton);
@@ -133,7 +133,7 @@ const completedEventListener = (taskID) => {
     const taskBox = document.getElementById(taskID + "-description");
     const taskCheckbox = document.getElementById(taskID + "-completed-checkbox")
     if (taskCheckbox.checked) {
-        taskBox.style.background = "#66ff66";
+        taskBox.style.background = "#7fd1b9";
         taskBox.style.textDecoration = "line-through";
         document.getElementById(taskID).style.opacity = 0.5;
     } else {
