@@ -124,6 +124,7 @@ class Item {
             document.getElementById(taskID).style.opacity = 1;
             document.getElementById(taskID + "-edit-button").style.visibility = 'visible';
         }
+        Item.countTasks();
     }   
 
     static destroy() {
@@ -136,9 +137,11 @@ class Item {
     }
 
     static countTasks() {
-        let taskListItems = document.querySelectorAll('.list-input-box-task');
-        document.getElementById('pending-tasks').innerText = taskListItems.length;
+        let taskListItems = document.querySelectorAll('.list-input-box-task').length;
+        let completedTasks = document.querySelectorAll('input[type="checkbox"]:checked').length;
+        document.getElementById('pending-tasks').innerText = taskListItems - completedTasks;
         document.getElementById('todo-list').style.visibility = 'visible';
+        if (taskListItems === 0) document.getElementById('clear-button').style.visibility = 'hidden';
     }
 }
 
