@@ -100,6 +100,7 @@ class Item {
     static countTasks() {
         let taskListItems = document.querySelectorAll('.list-input-box-task');
         document.getElementById('pending-tasks').innerText = taskListItems.length;
+        document.getElementById('todo-list').style.visibility = 'visible';
     }
 }
 
@@ -136,10 +137,12 @@ const completedEventListener = (taskID) => {
         taskBox.style.background = "#7fd1b9";
         taskBox.style.textDecoration = "line-through";
         document.getElementById(taskID).style.opacity = 0.5;
+        document.getElementById(taskID + "-edit-button").style.visibility = 'hidden';
     } else {
         taskBox.style.background = "white";
         taskBox.style.textDecoration = "none";
         document.getElementById(taskID).style.opacity = 1;
+        document.getElementById(taskID + "-edit-button").style.visibility = 'visible';
     }
 }
 
@@ -165,4 +168,6 @@ if (localStorage.length > 0) {
         item.addItem();
     })
     Item.count = localStorage.length;
+} else {
+    document.getElementById('todo-list').style.visibility = 'hidden';
 }
