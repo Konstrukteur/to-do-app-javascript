@@ -18,7 +18,6 @@
   justify-content: center;
   padding: 5%;
 }
-
 .todo-container {
   /*background-color: #fff;*/
   background-color: #ECE2D0;
@@ -26,7 +25,18 @@
   width: 100%;
   padding: 30px;
 }
-
+.input-field {
+  border: 0;
+  height: 30px;
+  margin: 0px;
+  width: 70%;
+  /* color: #495057; */
+  color: black;
+  background-color: white;
+  padding: 20px;
+  font-size: 18px;
+  outline: none;
+}
 .add-task-wrap {
   padding: 16px;
   text-align: center;
@@ -46,17 +56,51 @@
   justify-content: space-between;
   margin-bottom: 10px;
 }
-.input-field {
+.todo-task-list {
+  margin-top: 30px;
+}
+
+.heading-tasklist {
+  font-size: 24px;
+  color: black;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+.delete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Task description and entry fields */
+.task-description {
+  border: 0;
+  height: 40px;
+  padding: 10px 20px;
+  margin: 0px;
+  width: 70%;
+  color: #495057;
+  font-size: 18px;
+  outline: none;
+  background-color: white;
+  color: black;
+}
+.task-input-field {
   border: 0;
   height: 30px;
   margin: 0px;
   width: 70%;
-  color: #495057;
+  /* color: #495057; */
+  color: #AAA;
+  background-color: rgb(0, 115, 128);
   padding: 20px;
   font-size: 18px;
   outline: none;
 }
 
+
+/* Buttons */
 .btn-sub {
   width: 120px;
   height: 40px;
@@ -71,17 +115,6 @@
 }
 .btn-sub:hover {
   background-color: lightgrey;
-}
-
-.todo-task-list {
-  margin-top: 30px;
-}
-
-.heading-tasklist {
-  font-size: 24px;
-  color: black;
-  font-weight: 700;
-  margin-bottom: 15px;
 }
 #btn-sub{
   width: 120px;
@@ -98,22 +131,28 @@
 #btn-sub:hover {
   background-color: lightgrey;
 }
-.task-description {
-  border: 0;
-  height: 40px;
-  padding: 10px 20px;
-  margin: 0px;
-  width: 70%;
-  color: #495057;
-  font-size: 18px;
-  outline: none;
-  background-color: white;
-  color: black;
+.btn-add:hover {
+  color: white;
+  background-color: rgb(0, 115, 128);
 }
-
-.delete {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
+.btn-edit:hover {
+  color: white;
+  background-color: rgb(0, 115, 128);
+  
+}
+.btn-save {
+  color: white;
+  background-color: rgb(0, 115, 128);
+}
+.btn-save:hover {
+  color: white;
+  background-color: rgb(0, 115, 128);
+}
+.btn-delete:hover {
+  color: white;
+  background-color: red;
+}
+.btn-destroy-all:hover {
+  color: white;
+  background-color: red;
 }
