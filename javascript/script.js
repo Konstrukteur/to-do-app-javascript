@@ -24,6 +24,8 @@ class Item {
 
     // private method for writing to DOM
     #writeElements(taskID, taskText) {
+        // bug fix where counter does not update correctly, updating the counter if div id already exists
+        if (document.getElementById(taskID)) Item.count += 1;
         // create initial div tag
         let taskItem = document.createElement('div');
         taskItem.setAttribute('class', 'list-input-box-task');
