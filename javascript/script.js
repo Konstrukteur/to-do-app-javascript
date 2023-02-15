@@ -21,6 +21,7 @@ class Item {
         document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => Item.deleteItem(this.taskID));
         document.getElementById(`${this.taskID}-completed-checkbox`).addEventListener("click", () => Item.completedItem(this.taskID));
         document.getElementById('add-task-input').value = '';   // clear input box on item add
+        document.getElementById('clear-button').style.visibility = 'visible';
     }
 
     // private method for writing to DOM
@@ -130,6 +131,7 @@ class Item {
         localStorage.clear(); // destroy local storage
         let taskItems = document.querySelectorAll('.list-input-box-task');
         taskItems.forEach(task => task.remove());
+        document.getElementById('clear-button').style.visibility = 'hidden';
         Item.countTasks();
     }
 
