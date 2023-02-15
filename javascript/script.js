@@ -16,10 +16,10 @@ class Item {
     addItem() {
         localStorage.setItem(this.taskID, this.taskText);
         this.#writeElements(this.taskID, this.taskText);
-        document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => editEventListener(this.taskID));
-        document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => saveEventListener(this.taskID));
-        document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => deleteEventListener(this.taskID));
-        document.getElementById(`${this.taskID}-completed-checkbox`).addEventListener("click", () => completedEventListener(this.taskID));
+        document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => Item.editItem(this.taskID));
+        document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => Item.saveItem(this.taskID));
+        document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => Item.deleteItem(this.taskID));
+        document.getElementById(`${this.taskID}-completed-checkbox`).addEventListener("click", () => Item.completedItem(this.taskID));
         document.getElementById('add-task-input').value = '';   // clear input box on item add
     }
 
@@ -138,20 +138,6 @@ class Item {
         document.getElementById('pending-tasks').innerText = taskListItems.length;
         document.getElementById('todo-list').style.visibility = 'visible';
     }
-}
-
-/* Event Listener Callback Functions */
-const editEventListener = (taskID) => {
-    Item.editItem(taskID);
-}
-const saveEventListener = (taskID) => {
-    Item.saveItem(taskID);
-}
-const deleteEventListener = (taskID) => {
-    Item.deleteItem(taskID);
-}
-const completedEventListener = (taskID) => {
-    Item.completedItem(taskID);
 }
 
 /* Event Listeners */
