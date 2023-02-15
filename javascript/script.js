@@ -16,11 +16,12 @@ class Item {
     addItem() {
         localStorage.setItem(this.taskID, this.taskText);
         this.#writeElements(this.taskID, this.taskText);
-        document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => editEventListener(this.taskID));
-        document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => saveEventListener(this.taskID));
-        document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => deleteEventListener(this.taskID));
-        document.getElementById(`${this.taskID}-completed-checkbox`).addEventListener("click", () => completedEventListener(this.taskID));
+        document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => Item.editItem(this.taskID));
+        document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => Item.saveItem(this.taskID));
+        document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => Item.deleteItem(this.taskID));
+        document.getElementById(`${this.taskID}-completed-checkbox`).addEventListener("click", () => Item.completedItem(this.taskID));
         document.getElementById('add-task-input').value = '';   // clear input box on item add
+        document.getElementById('clear-button').style.visibility = 'visible';
     }
 
     // private method for writing to DOM
@@ -79,73 +80,72 @@ class Item {
     // delete todo task
     static deleteItem(taskID) {
         localStorage.removeItem(taskID);
-        const currentDiv = document.getElementById(taskID);
-        currentDiv.remove();
+        document.getElementById(taskID).remove();
         Item.countTasks();
     }
 
     // add edit todo task
-    editItem() {
-
+    static editItem(taskID) {
+        const descriptionField = document.getElementById(taskID + "-description");
+        descriptionField.style.display = "none";
+        const inputField = document.getElementById(taskID + "-text");
+        inputField.style.display = "block";
+        const editButton = document.getElementById(taskID + "-edit-button");
+        editButton.style.display = "none";
+        const saveButton = document.getElementById(taskID + "-save-button");
+        saveButton.style.display = "block";
     }
+
+    static saveItem(taskID) {
+        const descriptionField = document.getElementById(taskID + "-description");
+        descriptionField.style.display = "block";
+        const inputField = document.getElementById(taskID + "-text");
+        inputField.style.display = "none";
+        const editButton = document.getElementById(taskID + "-edit-button");
+        editButton.style.display = "block";
+        const saveButton = document.getElementById(taskID + "-save-button");
+        saveButton.style.display = "none";
+        let value = inputField.value;
+        descriptionField.innerHTML = value;
+        localStorage.setItem(taskID, value)
+    }
+
+    static completedItem(taskID) {
+        const taskBox = document.getElementById(taskID + "-description");
+        const taskCheckbox = document.getElementById(taskID + "-completed-checkbox")
+        if (taskCheckbox.checked) {
+            taskBox.style.background = "#7fd1b9";
+            taskBox.style.textDecoration = "line-through";
+            document.getElementById(taskID).style.opacity = 0.5;
+            document.getElementById(taskID + "-edit-button").style.visibility = 'hidden';
+        } else {
+            taskBox.style.background = "white";
+            taskBox.style.textDecoration = "none";
+            document.getElementById(taskID).style.opacity = 1;
+            document.getElementById(taskID + "-edit-button").style.visibility = 'visible';
+        }
+        Item.countTasks();
+    }   
 
     static destroy() {
         Item.count = 0; // reset ID counter
         localStorage.clear(); // destroy local storage
         let taskItems = document.querySelectorAll('.list-input-box-task');
         taskItems.forEach(task => task.remove());
+        document.getElementById('clear-button').style.visibility = 'hidden';
         Item.countTasks();
     }
 
     static countTasks() {
-        let taskListItems = document.querySelectorAll('.list-input-box-task');
-        document.getElementById('pending-tasks').innerText = taskListItems.length;
+        let taskListItems = document.querySelectorAll('.list-input-box-task').length;
+        let completedTasks = document.querySelectorAll('input[type="checkbox"]:checked').length;
+        document.getElementById('pending-tasks').innerText = taskListItems - completedTasks;
         document.getElementById('todo-list').style.visibility = 'visible';
+        if (taskListItems === 0) document.getElementById('clear-button').style.visibility = 'hidden';
     }
 }
 
-const editEventListener = (taskID) => {
-    const descriptionField = document.getElementById(taskID + "-description");
-    descriptionField.style.display = "none";
-    const inputField = document.getElementById(taskID + "-text");
-    inputField.style.display = "block";
-    const editButton = document.getElementById(taskID + "-edit-button");
-    editButton.style.display = "none";
-    const saveButton = document.getElementById(taskID + "-save-button");
-    saveButton.style.display = "block";
-}
-const saveEventListener = (taskID) => {
-    const descriptionField = document.getElementById(taskID + "-description");
-    descriptionField.style.display = "block";
-    const inputField = document.getElementById(taskID + "-text");
-    inputField.style.display = "none";
-    const editButton = document.getElementById(taskID + "-edit-button");
-    editButton.style.display = "block";
-    const saveButton = document.getElementById(taskID + "-save-button");
-    saveButton.style.display = "none";
-    value = inputField.value;
-    descriptionField.innerHTML = value;
-    localStorage.setItem(taskID, value)
-}
-const deleteEventListener = (taskID) => {
-    Item.deleteItem(taskID);
-}
-const completedEventListener = (taskID) => {
-    const taskBox = document.getElementById(taskID + "-description");
-    const taskCheckbox = document.getElementById(taskID + "-completed-checkbox")
-    if (taskCheckbox.checked) {
-        taskBox.style.background = "#7fd1b9";
-        taskBox.style.textDecoration = "line-through";
-        document.getElementById(taskID).style.opacity = 0.5;
-        document.getElementById(taskID + "-edit-button").style.visibility = 'hidden';
-    } else {
-        taskBox.style.background = "white";
-        taskBox.style.textDecoration = "none";
-        document.getElementById(taskID).style.opacity = 1;
-        document.getElementById(taskID + "-edit-button").style.visibility = 'visible';
-    }
-}
-
+/* Event Listeners */
 addButton.addEventListener('click', () => {
     let newTaskText = document.querySelector('#add-task-input').value;
     let itemID = Item.count += 1;
