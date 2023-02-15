@@ -130,7 +130,9 @@ addButton.addEventListener('click', () => {
 })
 
 clearButton.addEventListener('click', () => {
-    Item.destroy(); // static method so invoked on superclass
+    if (window.confirm('Are you sure that you want to delete all tasks?')) {
+        Item.destroy(); // static method so invoked on superclass
+    }
 })
 
 // determine if local storage already has items. If so, write to DOM.
