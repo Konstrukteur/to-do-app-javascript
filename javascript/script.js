@@ -19,6 +19,7 @@ class Item {
         document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => editEventListener(this.taskID));
         document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => saveEventListener(this.taskID));
         document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => deleteEventListener(this.taskID));
+        document.getElementById('add-task-input').value = '';   // clear input box on item add
     } 
 
     // private method for writing to DOM
