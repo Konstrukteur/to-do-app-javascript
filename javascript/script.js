@@ -19,13 +19,12 @@ class Item {
         document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => editEventListener(this.taskID));
         document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => saveEventListener(this.taskID));
         document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => deleteEventListener(this.taskID));
+        document.getElementById(`${this.taskID}-completed-checkbox`).addEventListener("click", () => completedEventListener(this.taskID));
         document.getElementById('add-task-input').value = '';   // clear input box on item add
-    } 
+    }
 
     // private method for writing to DOM
     #writeElements(taskID, taskText) {
-        // bug fix where counter does not update correctly, updating the counter if div id already exists
-        if (document.getElementById(taskID)) Item.count += 1;
         // create initial div tag
         let taskItem = document.createElement('div');
         taskItem.setAttribute('class', 'list-input-box-task');
@@ -40,7 +39,7 @@ class Item {
         // create input box
         let taskBox = document.createElement('input')
         taskBox.setAttribute('type', 'text');
-        taskBox.setAttribute('class', 'input-field');
+        taskBox.setAttribute('class', 'task-input-field');
         taskBox.setAttribute('id', taskID + '-text');
         taskBox.setAttribute('value', taskText);
         taskBox.style.display = "none";
@@ -48,14 +47,14 @@ class Item {
         // create edit button
         let editTaskButton = document.createElement('input');
         editTaskButton.setAttribute('type', 'button');
-        editTaskButton.setAttribute('class', 'btn-sub');
+        editTaskButton.setAttribute('class', 'btn-sub btn-edit');
         editTaskButton.setAttribute('id', taskID + '-edit-button')
         editTaskButton.setAttribute('value', 'Edit');
         document.getElementById(taskID).appendChild(editTaskButton);
         // create save button
         let saveTaskButton = document.createElement('input');
         saveTaskButton.setAttribute('type', 'button');
-        saveTaskButton.setAttribute('class', 'btn-sub');
+        saveTaskButton.setAttribute('class', 'btn-sub btn-save');
         saveTaskButton.setAttribute('id', taskID + '-save-button')
         saveTaskButton.setAttribute('value', 'Save');
         saveTaskButton.style.display = "none";
@@ -63,10 +62,16 @@ class Item {
         // create delete button
         let deleteTaskButton = document.createElement('input');
         deleteTaskButton.setAttribute('type', 'button');
-        deleteTaskButton.setAttribute('class', 'btn-sub');
+        deleteTaskButton.setAttribute('class', 'btn-sub btn-delete');
         deleteTaskButton.setAttribute('id', taskID + '-delete-button')
         deleteTaskButton.setAttribute('value', 'Delete');
         document.getElementById(taskID).appendChild(deleteTaskButton);
+        // create 'done' checkbox
+        let completeCheckbox = document.createElement('input');
+        completeCheckbox.setAttribute('type', 'checkbox');
+        completeCheckbox.setAttribute('id', taskID + '-completed-checkbox')
+        completeCheckbox.setAttribute('value', 'Complete');
+        document.getElementById(taskID).appendChild(completeCheckbox);
         // update counter
         Item.countTasks();
     }
@@ -95,6 +100,7 @@ class Item {
     static countTasks() {
         let taskListItems = document.querySelectorAll('.list-input-box-task');
         document.getElementById('pending-tasks').innerText = taskListItems.length;
+        document.getElementById('todo-list').style.visibility = 'visible';
     }
 }
 
@@ -124,6 +130,21 @@ const saveEventListener = (taskID) => {
 const deleteEventListener = (taskID) => {
     Item.deleteItem(taskID);
 }
+const completedEventListener = (taskID) => {
+    const taskBox = document.getElementById(taskID + "-description");
+    const taskCheckbox = document.getElementById(taskID + "-completed-checkbox")
+    if (taskCheckbox.checked) {
+        taskBox.style.background = "#7fd1b9";
+        taskBox.style.textDecoration = "line-through";
+        document.getElementById(taskID).style.opacity = 0.5;
+        document.getElementById(taskID + "-edit-button").style.visibility = 'hidden';
+    } else {
+        taskBox.style.background = "white";
+        taskBox.style.textDecoration = "none";
+        document.getElementById(taskID).style.opacity = 1;
+        document.getElementById(taskID + "-edit-button").style.visibility = 'visible';
+    }
+}
 
 addButton.addEventListener('click', () => {
     let newTaskText = document.querySelector('#add-task-input').value;
@@ -145,6 +166,8 @@ if (localStorage.length > 0) {
         const value = localStorage.getItem(key);
         const item = new Item(key, value);
         item.addItem();
-        Item.count += 1;
     })
+    Item.count = localStorage.length;
+} else {
+    document.getElementById('todo-list').style.visibility = 'hidden';
 }
