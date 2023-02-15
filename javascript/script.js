@@ -25,7 +25,7 @@ class Item {
     // private method for writing to DOM
     #writeElements(taskID, taskText) {
         // bug fix where counter does not update correctly, updating the counter if div id already exists
-        if (document.getElementById(taskID)) Item.count += 1;
+        if (document.getElementById(taskID) && localStorage.length > 0) Item.count += 1;
         // create initial div tag
         let taskItem = document.createElement('div');
         taskItem.setAttribute('class', 'list-input-box-task');
@@ -67,6 +67,12 @@ class Item {
         deleteTaskButton.setAttribute('id', taskID + '-delete-button')
         deleteTaskButton.setAttribute('value', 'Delete');
         document.getElementById(taskID).appendChild(deleteTaskButton);
+        // create 'done' checkbox
+        let completeCheckbox = document.createElement('input');
+        completeCheckbox.setAttribute('type', 'checkbox');
+        completeCheckbox.setAttribute('id', taskID + '-complete-checkbox')
+        completeCheckbox.setAttribute('value', 'Complete');
+        document.getElementById(taskID).appendChild(completeCheckbox);
         // update counter
         Item.countTasks();
     }
