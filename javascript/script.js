@@ -126,7 +126,7 @@ addButton.addEventListener('click', () => {
     let newTaskText = document.querySelector('#add-task-input').value;
     let itemID = Item.count += 1;
     let item = new Item(itemID, newTaskText);
-    if (newTaskText) item.addItem();
+    if (newTaskText) item.addItem();    // only add item if value is not empty
 })
 
 clearButton.addEventListener('click', () => {
