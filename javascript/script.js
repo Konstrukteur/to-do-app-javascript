@@ -19,13 +19,12 @@ class Item {
         document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => editEventListener(this.taskID));
         document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => saveEventListener(this.taskID));
         document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => deleteEventListener(this.taskID));
+        document.getElementById(`${this.taskID}-completed-checkbox`).addEventListener("click", () => completedEventListener(this.taskID));
         document.getElementById('add-task-input').value = '';   // clear input box on item add
-    } 
+    }
 
     // private method for writing to DOM
     #writeElements(taskID, taskText) {
-        // bug fix where counter does not update correctly, updating the counter if div id already exists
-        if (document.getElementById(taskID) && localStorage.length > 0) Item.count += 1;
         // create initial div tag
         let taskItem = document.createElement('div');
         taskItem.setAttribute('class', 'list-input-box-task');
@@ -70,7 +69,7 @@ class Item {
         // create 'done' checkbox
         let completeCheckbox = document.createElement('input');
         completeCheckbox.setAttribute('type', 'checkbox');
-        completeCheckbox.setAttribute('id', taskID + '-complete-checkbox')
+        completeCheckbox.setAttribute('id', taskID + '-completed-checkbox')
         completeCheckbox.setAttribute('value', 'Complete');
         document.getElementById(taskID).appendChild(completeCheckbox);
         // update counter
@@ -130,6 +129,17 @@ const saveEventListener = (taskID) => {
 const deleteEventListener = (taskID) => {
     Item.deleteItem(taskID);
 }
+const completedEventListener = (taskID) => {
+    const taskBox = document.getElementById(taskID + "-description");
+    const taskCheckbox = document.getElementById(taskID + "-completed-checkbox")
+    if (taskCheckbox.checked) {
+        taskBox.style.background = "#66ff66";
+        taskBox.style.textDecoration = "line-through";
+    } else {
+        taskBox.style.background = "white";
+        taskBox.style.textDecoration = "none";
+    }
+}
 
 addButton.addEventListener('click', () => {
     let newTaskText = document.querySelector('#add-task-input').value;
@@ -151,6 +161,6 @@ if (localStorage.length > 0) {
         const value = localStorage.getItem(key);
         const item = new Item(key, value);
         item.addItem();
-        Item.count += 1;
     })
+    Item.count = localStorage.length;
 }
