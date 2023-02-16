@@ -171,3 +171,8 @@ if (localStorage.length > 0) {
 } else {
     document.getElementById('todo-list').style.visibility = 'hidden';
 }
+// focus directly on add input new task
+let toFocus= document.querySelector(".input-field");
+window.onload = function () {
+    toFocus.focus();
+};
