@@ -142,6 +142,7 @@ class Item {
         document.getElementById('pending-tasks').innerText = taskListItems - completedTasks;
         document.getElementById('todo-list').style.visibility = 'visible';
         if (taskListItems === 0) document.getElementById('clear-button').style.visibility = 'hidden';
+        focusTextBox();
     }
 }
 
@@ -171,8 +172,10 @@ if (localStorage.length > 0) {
 } else {
     document.getElementById('todo-list').style.visibility = 'hidden';
 }
-// focus directly on add input new task
-let toFocus= document.querySelector(".input-field");
-window.onload = function () {
-    toFocus.focus();
+
+// focus on the task input text box
+const focusTextBox = () => {
+    document.querySelector(".input-field").focus();
 };
+
+window.onload = focusTextBox();
