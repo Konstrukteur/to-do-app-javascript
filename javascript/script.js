@@ -2,6 +2,7 @@ const addButton = document.querySelector('#add-task-button');
 const editButton = document.querySelector('#edit-task-button');
 const deleteButton = document.querySelector('#delete-task-button');
 const clearButton = document.querySelector('#clear-button');
+const inputField = document.querySelector('#add-task-input');
 
 class Item {
     constructor(taskID, taskText) {
@@ -152,7 +153,16 @@ addButton.addEventListener('click', () => {
     let itemID = Item.count += 1;
     let item = new Item(itemID, newTaskText);
     if (newTaskText) item.addItem();    // only add item if value is not empty
-})
+});
+
+inputField.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+        let newTaskText = document.querySelector('#add-task-input').value;
+        let itemID = Item.count += 1;
+        let item = new Item(itemID, newTaskText);
+        if (newTaskText) item.addItem();
+    }
+});
 
 clearButton.addEventListener('click', () => {
     if (window.confirm('Are you sure that you want to delete all tasks?')) {
