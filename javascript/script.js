@@ -1,9 +1,7 @@
 class Item {
     count = 0
 
-    constructor(taskID, taskText) {
-        this.taskID = taskID;
-        this.taskText = taskText;
+    constructor() {
         this.init();
         this.focusTextBox()
     }
@@ -22,7 +20,7 @@ class Item {
                 const value = localStorage.getItem(key);
                 this.#writeElements(key, value)
                 document.getElementById(`${key}-edit-button`).addEventListener("click", () => this.editItem(key));
-                document.getElementById(`${key}-save-button`).addEventListener("click", () => this.saveItem(key));
+                document.getElementById(`${key}-save-button`).addEventListener("clickG", () => this.saveItem(key));
                 document.getElementById(`${key}-delete-button`).addEventListener("click", () => this.deleteItem(key));
                 document.getElementById(`${key}-completed-checkbox`).addEventListener("click", () => this.completedItem(key));
                 document.getElementById('add-task-input').value = '';   // clear input box on item add
@@ -36,8 +34,6 @@ class Item {
 
     bindButtons() {
         this.addButton = document.querySelector('#add-task-button');
-        this.editButton = document.querySelector('#edit-task-button');
-        this.deleteButton = document.querySelector('#delete-task-button');
         this.clearButton = document.querySelector('#clear-button');
         this.inputField = document.querySelector('#add-task-input');
     }
@@ -68,7 +64,6 @@ class Item {
         document.querySelector(".input-field").focus();
     };
 
-    // add new todo task
     addItem(ID, text) {
         localStorage.setItem(ID, text);
         this.#writeElements(ID, text);
@@ -80,7 +75,6 @@ class Item {
         document.getElementById('clear-button').style.visibility = 'visible';
     }
 
-    // private method for writing to DOM
     #writeElements(taskID, taskText) {
         // create initial div tag
         let taskItem = document.createElement('div');
@@ -133,14 +127,12 @@ class Item {
         this.countTasks();
     }
 
-    // delete todo task
     deleteItem(taskID) {
         localStorage.removeItem(taskID);
         document.getElementById(taskID).remove();
         this.countTasks();
     }
 
-    // add edit todo task
     editItem(taskID) {
         const descriptionField = document.getElementById(taskID + "-description");
         descriptionField.style.display = "none";
@@ -170,14 +162,14 @@ class Item {
         const taskBox = document.getElementById(taskID + "-description");
         const taskCheckbox = document.getElementById(taskID + "-completed-checkbox")
         if (taskCheckbox.checked) {
-            taskBox.style.background = "#7fd1b9";
+            taskBox.style.background = '#7fd1b9';
             taskBox.style.textDecoration = "line-through";
-            document.getElementById(taskID).style.opacity = 0.5;
+            document.getElementById(taskID).style.opacity = '0.5';
             document.getElementById(taskID + "-edit-button").style.visibility = 'hidden';
         } else {
             taskBox.style.background = "white";
             taskBox.style.textDecoration = "none";
-            document.getElementById(taskID).style.opacity = 1;
+            document.getElementById(taskID).style.opacity = '1';
             document.getElementById(taskID + "-edit-button").style.visibility = 'visible';
         }
         this.countTasks();
