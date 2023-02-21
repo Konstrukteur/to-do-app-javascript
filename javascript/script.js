@@ -20,9 +20,13 @@ class Item {
             const storedKeys = Object.keys(localStorage).sort((a, b) => a - b);
             storedKeys.forEach(key => {
                 const value = localStorage.getItem(key);
-                // const item = new Item(key, value);
-                // this.addItem();
                 this.#writeElements(key, value)
+                document.getElementById(`${key}-edit-button`).addEventListener("click", () => this.editItem(key));
+                document.getElementById(`${key}-save-button`).addEventListener("click", () => this.saveItem(key));
+                document.getElementById(`${key}-delete-button`).addEventListener("click", () => this.deleteItem(key));
+                document.getElementById(`${key}-completed-checkbox`).addEventListener("click", () => this.completedItem(key));
+                document.getElementById('add-task-input').value = '';   // clear input box on item add
+                document.getElementById('clear-button').style.visibility = 'visible';
             })
             this.count = localStorage.length;
         } else {
@@ -42,15 +46,15 @@ class Item {
         this.addButton.addEventListener('click', () => {
             let newTaskText = document.querySelector('#add-task-input').value;
             let itemID = this.count += 1;
-            let item = new Item(itemID, newTaskText);
-            if (newTaskText) item.addItem();    // only add item if value is not empty
+            // let item = new Item(itemID, newTaskText);
+            if (newTaskText) this.addItem(itemID, newTaskText);    // only add item if value is not empty
         });
-       this. inputField.addEventListener('keypress', (event) => {
+       this.inputField.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 let newTaskText = document.querySelector('#add-task-input').value;
                 let itemID = this.count += 1;
-                let item = new Item(itemID, newTaskText);
-                if (newTaskText) item.addItem();
+                // let item = new Item(itemID, newTaskText);
+                if (newTaskText) this.addItem(itemID, newTaskText);
             }
         });
         this.clearButton.addEventListener('click', () => {
@@ -65,13 +69,13 @@ class Item {
     };
 
     // add new todo task
-    addItem() {
-        localStorage.setItem(this.taskID, this.taskText);
-        this.#writeElements(this.taskID, this.taskText);
-        document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => this.editItem(this.taskID));
-        document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => this.saveItem(this.taskID));
-        document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => this.deleteItem(this.taskID));
-        document.getElementById(`${this.taskID}-completed-checkbox`).addEventListener("click", () => this.completedItem(this.taskID));
+    addItem(ID, text) {
+        localStorage.setItem(ID, text);
+        this.#writeElements(ID, text);
+        document.getElementById(`${ID}-edit-button`).addEventListener("click", () => this.editItem(ID));
+        document.getElementById(`${ID}-save-button`).addEventListener("click", () => this.saveItem(ID));
+        document.getElementById(`${ID}-delete-button`).addEventListener("click", () => this.deleteItem(ID));
+        document.getElementById(`${ID}-completed-checkbox`).addEventListener("click", () => this.completedItem(ID));
         document.getElementById('add-task-input').value = '';   // clear input box on item add
         document.getElementById('clear-button').style.visibility = 'visible';
     }
