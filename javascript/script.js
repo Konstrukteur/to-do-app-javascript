@@ -1,31 +1,80 @@
-const addButton = document.querySelector('#add-task-button');
-const editButton = document.querySelector('#edit-task-button');
-const deleteButton = document.querySelector('#delete-task-button');
-const clearButton = document.querySelector('#clear-button');
-const inputField = document.querySelector('#add-task-input');
-
 class Item {
-    constructor(taskID, taskText) {
-        this.taskID = taskID;
-        this.taskText = taskText;
+    count = 0
+
+    constructor() {
+        this.init();
+        this.focusTextBox()
     }
 
-    // counter to increment every time a new instance is created, for a local storage ID
-    static count = 0;
+    init() {
+        this.bindButtons();
+        this.bindEventListeners();
+        this.checkStorage();
+    }
 
-    // add new todo task
-    addItem() {
-        localStorage.setItem(this.taskID, this.taskText);
-        this.#writeElements(this.taskID, this.taskText);
-        document.getElementById(`${this.taskID}-edit-button`).addEventListener("click", () => Item.editItem(this.taskID));
-        document.getElementById(`${this.taskID}-save-button`).addEventListener("click", () => Item.saveItem(this.taskID));
-        document.getElementById(`${this.taskID}-delete-button`).addEventListener("click", () => Item.deleteItem(this.taskID));
-        document.getElementById(`${this.taskID}-completed-checkbox`).addEventListener("click", () => Item.completedItem(this.taskID));
+    checkStorage() {
+        // determine if local storage already has items. If so, write to DOM.
+        if (localStorage.length > 0) {
+            const storedKeys = Object.keys(localStorage).sort((a, b) => a - b);
+            storedKeys.forEach(key => {
+                const value = localStorage.getItem(key);
+                this.#writeElements(key, value)
+                document.getElementById(`${key}-edit-button`).addEventListener("click", () => this.editItem(key));
+                document.getElementById(`${key}-save-button`).addEventListener("clickG", () => this.saveItem(key));
+                document.getElementById(`${key}-delete-button`).addEventListener("click", () => this.deleteItem(key));
+                document.getElementById(`${key}-completed-checkbox`).addEventListener("click", () => this.completedItem(key));
+                document.getElementById('add-task-input').value = '';   // clear input box on item add
+                document.getElementById('clear-button').style.visibility = 'visible';
+            })
+            this.count = localStorage.length;
+        } else {
+            document.getElementById('todo-list').style.visibility = 'hidden';
+        }
+    }
+
+    bindButtons() {
+        this.addButton = document.querySelector('#add-task-button');
+        this.clearButton = document.querySelector('#clear-button');
+        this.inputField = document.querySelector('#add-task-input');
+    }
+
+    bindEventListeners() {
+        this.addButton.addEventListener('click', () => {
+            let newTaskText = document.querySelector('#add-task-input').value;
+            let itemID = this.count += 1;
+            // let item = new Item(itemID, newTaskText);
+            if (newTaskText) this.addItem(itemID, newTaskText);    // only add item if value is not empty
+        });
+       this.inputField.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                let newTaskText = document.querySelector('#add-task-input').value;
+                let itemID = this.count += 1;
+                // let item = new Item(itemID, newTaskText);
+                if (newTaskText) this.addItem(itemID, newTaskText);
+            }
+        });
+        this.clearButton.addEventListener('click', () => {
+            if (window.confirm('Are you sure that you want to delete all tasks?')) {
+                this.destroy(); // static method so invoked on superclass
+            }
+        })
+    }
+
+    focusTextBox = () => {
+        document.querySelector(".input-field").focus();
+    };
+
+    addItem(ID, text) {
+        localStorage.setItem(ID, text);
+        this.#writeElements(ID, text);
+        document.getElementById(`${ID}-edit-button`).addEventListener("click", () => this.editItem(ID));
+        document.getElementById(`${ID}-save-button`).addEventListener("click", () => this.saveItem(ID));
+        document.getElementById(`${ID}-delete-button`).addEventListener("click", () => this.deleteItem(ID));
+        document.getElementById(`${ID}-completed-checkbox`).addEventListener("click", () => this.completedItem(ID));
         document.getElementById('add-task-input').value = '';   // clear input box on item add
         document.getElementById('clear-button').style.visibility = 'visible';
     }
 
-    // private method for writing to DOM
     #writeElements(taskID, taskText) {
         // create initial div tag
         let taskItem = document.createElement('div');
@@ -75,18 +124,16 @@ class Item {
         completeCheckbox.setAttribute('value', 'Complete');
         document.getElementById(taskID).appendChild(completeCheckbox);
         // update counter
-        Item.countTasks();
+        this.countTasks();
     }
 
-    // delete todo task
-    static deleteItem(taskID) {
+    deleteItem(taskID) {
         localStorage.removeItem(taskID);
         document.getElementById(taskID).remove();
-        Item.countTasks();
+        this.countTasks();
     }
 
-    // add edit todo task
-    static editItem(taskID) {
+    editItem(taskID) {
         const descriptionField = document.getElementById(taskID + "-description");
         descriptionField.style.display = "none";
         const inputField = document.getElementById(taskID + "-text");
@@ -97,7 +144,7 @@ class Item {
         saveButton.style.display = "block";
     }
 
-    static saveItem(taskID) {
+    saveItem(taskID) {
         const descriptionField = document.getElementById(taskID + "-description");
         descriptionField.style.display = "block";
         const inputField = document.getElementById(taskID + "-text");
@@ -111,81 +158,40 @@ class Item {
         localStorage.setItem(taskID, value)
     }
 
-    static completedItem(taskID) {
+    completedItem(taskID) {
         const taskBox = document.getElementById(taskID + "-description");
         const taskCheckbox = document.getElementById(taskID + "-completed-checkbox")
         if (taskCheckbox.checked) {
-            taskBox.style.background = "#7fd1b9";
+            taskBox.style.background = '#7fd1b9';
             taskBox.style.textDecoration = "line-through";
-            document.getElementById(taskID).style.opacity = 0.5;
+            document.getElementById(taskID).style.opacity = '0.5';
             document.getElementById(taskID + "-edit-button").style.visibility = 'hidden';
         } else {
             taskBox.style.background = "white";
             taskBox.style.textDecoration = "none";
-            document.getElementById(taskID).style.opacity = 1;
+            document.getElementById(taskID).style.opacity = '1';
             document.getElementById(taskID + "-edit-button").style.visibility = 'visible';
         }
-        Item.countTasks();
+        this.countTasks();
     }   
 
-    static destroy() {
-        Item.count = 0; // reset ID counter
+    destroy() {
+        this.count = 0; // reset ID counter
         localStorage.clear(); // destroy local storage
         let taskItems = document.querySelectorAll('.list-input-box-task');
         taskItems.forEach(task => task.remove());
         document.getElementById('clear-button').style.visibility = 'hidden';
-        Item.countTasks();
+        this.countTasks();
     }
 
-    static countTasks() {
+    countTasks() {
         let taskListItems = document.querySelectorAll('.list-input-box-task').length;
         let completedTasks = document.querySelectorAll('input[type="checkbox"]:checked').length;
-        document.getElementById('pending-tasks').innerText = taskListItems - completedTasks;
+        document.getElementById('pending-tasks').innerText = String(taskListItems - completedTasks);
         document.getElementById('todo-list').style.visibility = 'visible';
         if (taskListItems === 0) document.getElementById('clear-button').style.visibility = 'hidden';
-        focusTextBox();
+        this.focusTextBox();
     }
 }
 
-/* Event Listeners */
-addButton.addEventListener('click', () => {
-    let newTaskText = document.querySelector('#add-task-input').value;
-    let itemID = Item.count += 1;
-    let item = new Item(itemID, newTaskText);
-    if (newTaskText) item.addItem();    // only add item if value is not empty
-});
-
-inputField.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
-        let newTaskText = document.querySelector('#add-task-input').value;
-        let itemID = Item.count += 1;
-        let item = new Item(itemID, newTaskText);
-        if (newTaskText) item.addItem();
-    }
-});
-
-clearButton.addEventListener('click', () => {
-    if (window.confirm('Are you sure that you want to delete all tasks?')) {
-        Item.destroy(); // static method so invoked on superclass
-    }
-})
-
-// determine if local storage already has items. If so, write to DOM.
-if (localStorage.length > 0) {
-    const storedKeys = Object.keys(localStorage).sort((a, b) => a - b);
-    storedKeys.forEach(key => {
-        const value = localStorage.getItem(key);
-        const item = new Item(key, value);
-        item.addItem();
-    })
-    Item.count = localStorage.length;
-} else {
-    document.getElementById('todo-list').style.visibility = 'hidden';
-}
-
-// focus on the task input text box
-const focusTextBox = () => {
-    document.querySelector(".input-field").focus();
-};
-
-window.onload = focusTextBox();
+new Item()
