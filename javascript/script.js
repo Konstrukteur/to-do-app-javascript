@@ -1,5 +1,6 @@
 class Item {
     count = 0
+    LOCAL_STORAGE_KEY = 'todolist';
 
     constructor() {
         this.init();
@@ -14,20 +15,20 @@ class Item {
 
     checkStorage() {
         // determine if local storage already has items. If so, write to DOM.
-        if (localStorage.length > 0) {
-            const storedKeys = Object.keys(localStorage).sort((a, b) => a - b);
-            storedKeys.forEach(key => {
-                const value = localStorage.getItem(key);
-                this.#writeElements(key, value)
-                document.getElementById(`${key}-edit-button`).addEventListener("click", () => this.editItem(key));
-                document.getElementById(`${key}-save-button`).addEventListener("clickG", () => this.saveItem(key));
-                document.getElementById(`${key}-delete-button`).addEventListener("click", () => this.deleteItem(key));
-                document.getElementById(`${key}-completed-checkbox`).addEventListener("click", () => this.completedItem(key));
+        if (localStorage.getItem(this.LOCAL_STORAGE_KEY)) {
+            const storedItems = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY))
+            storedItems.forEach(item => {
+                this.#writeElements(item.id, item.text)
+                document.getElementById(`${item.id}-edit-button`).addEventListener("click", () => this.editItem(item.id));
+                document.getElementById(`${item.id}-save-button`).addEventListener("clickG", () => this.saveItem(item.id));
+                document.getElementById(`${item.id}-delete-button`).addEventListener("click", () => this.deleteItem(item.id));
+                document.getElementById(`${item.id}-completed-checkbox`).addEventListener("click", () => this.completedItem(item.id));
                 document.getElementById('add-task-input').value = '';   // clear input box on item add
                 document.getElementById('clear-button').style.visibility = 'visible';
             })
-            this.count = localStorage.length;
+            this.count = storedItems.length;
         } else {
+            localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify([]));
             document.getElementById('todo-list').style.visibility = 'hidden';
         }
     }
@@ -42,7 +43,6 @@ class Item {
         this.addButton.addEventListener('click', () => {
             let newTaskText = document.querySelector('#add-task-input').value;
             let itemID = this.count += 1;
-            // let item = new Item(itemID, newTaskText);
             if (newTaskText) this.addItem(itemID, newTaskText);    // only add item if value is not empty
         });
        this.inputField.addEventListener('keypress', (event) => {
@@ -55,7 +55,7 @@ class Item {
         });
         this.clearButton.addEventListener('click', () => {
             if (window.confirm('Are you sure that you want to delete all tasks?')) {
-                this.destroy(); // static method so invoked on superclass
+                this.destroy();
             }
         })
     }
@@ -65,7 +65,10 @@ class Item {
     };
 
     addItem(ID, text) {
-        localStorage.setItem(ID, text);
+        if (!localStorage.getItem(this.LOCAL_STORAGE_KEY)) localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify([]));
+        let storedItems = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY));
+        console.log(storedItems)
+        localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify([...storedItems, {id: ID, text: text}]));
         this.#writeElements(ID, text);
         document.getElementById(`${ID}-edit-button`).addEventListener("click", () => this.editItem(ID));
         document.getElementById(`${ID}-save-button`).addEventListener("click", () => this.saveItem(ID));
