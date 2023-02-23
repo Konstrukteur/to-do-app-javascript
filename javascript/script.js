@@ -156,7 +156,9 @@ class Item {
 	}
 
 	deleteItem(taskID) {
-		localStorage.removeItem(taskID);
+		const storedItems = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY));
+		let filtered = storedItems.filter((item) => item.id!== taskID);
+		localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(filtered));
 		document.getElementById(taskID).remove();
 		this.countTasks();
 	}
@@ -183,7 +185,9 @@ class Item {
 		saveButton.style.display = 'none';
 		const { value } = inputField;
 		descriptionField.innerHTML = value;
-		localStorage.setItem(taskID, value);
+		const storedItems = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY));
+		const updatedItems = storedItems.map(item => item.id === taskID? {...item, text: value } : item);
+		localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(updatedItems));
 	}
 
 	completedItem(taskID) {
