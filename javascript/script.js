@@ -1,6 +1,4 @@
 class Item {
-	count = 0;
-
 	LOCAL_STORAGE_KEY = 'todolist';
 
 	constructor() {
@@ -38,7 +36,6 @@ class Item {
 				document.getElementById('clear-button').style.visibility = 'visible';
 			});
 		} else {
-			localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify([]));
 			document.getElementById('todo-list').style.visibility = 'hidden';
 		}
 	}
@@ -57,7 +54,6 @@ class Item {
 		this.inputField.addEventListener('keypress', (event) => {
 			if (event.key === 'Enter') {
 				const newTaskText = document.querySelector('#add-task-input').value;
-				// let item = new Item(itemID, newTaskText);
 				if (newTaskText) this.addItem(crypto.randomUUID(), newTaskText);
 			}
 		});
@@ -211,8 +207,7 @@ class Item {
 	}
 
 	destroy() {
-		this.count = 0; // reset ID counter
-		localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify([])); // destroy local storage
+		localStorage.removeItem(this.LOCAL_STORAGE_KEY); // destroy local storage
 		const taskItems = document.querySelectorAll('.list-input-box-task');
 		taskItems.forEach((task) => task.remove());
 		document.getElementById('clear-button').style.visibility = 'hidden';
